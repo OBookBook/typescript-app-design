@@ -1,4 +1,7 @@
 import fs from "fs";
+import util from "util";
+
+const promisifyReadFile = util.promisify(fs.readFile);
 
 function main() {
   let fileContent: string = "Not loaded";
