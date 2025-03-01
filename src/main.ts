@@ -7,6 +7,8 @@ const app = express();
 
 app.use(morgan("dev"));
 
+app.use(express.static("public", { extensions: ["html"] }));
+
 app.get("/api/hello", (req, res) => {
   res.json({
     message: "Hello World",
