@@ -10,4 +10,6 @@ npx ts-node hello.ts
 
 ```shell
 npx ts-node src/main.ts
+or
+npm start
 ```
