@@ -9,6 +9,7 @@ app.get("/api/hello", (req, res) => {
   });
 });
 
+// @comand: npx ts-node src/main.ts
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
