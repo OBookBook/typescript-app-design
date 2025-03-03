@@ -33,6 +33,13 @@ app.get("/api/error", async (req, res) => {
   throw new Error("Error endpoint");
 });
 
+app.post("/api/games", async (req, res) => {
+  const startedAt = new Date();
+  console.log("started at", startedAt);
+
+  res.status(201).end();
+});
+
 app.use(errorHandler);
 
 // @comand: npx ts-node src/main.ts
