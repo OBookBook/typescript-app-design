@@ -3,6 +3,7 @@ import morgan from "morgan"; // アクセスログを出力する
 import "express-async-errors"; // 非同期エラーハンドリング
 import path from "path";
 import sassMiddleware from "node-sass-middleware";
+import mysql from "mysql2/promise";
 
 const PORT = 3100;
 const app = express();
@@ -33,10 +34,25 @@ app.get("/api/error", async (req, res) => {
   throw new Error("Error endpoint");
 });
 
+// SQL: select * from games;
 app.post("/api/games", async (req, res) => {
   const startedAt = new Date();
-  console.log("started at", startedAt);
+  const connection = await mysql.createConnection({
+    host: "localhost",
+    database: "reversi",
+    user: "reversi",
+    password: "reversi",
+  });
 
+  try {
+    await connection.beginTransaction();
+    await connection.execute("insert into games (started_at) values (?)", [
+      startedAt,
+    ]);
+    await connection.commit();
+  } finally {
+    await connection.end();
+  }
   res.status(201).end();
 });
 
