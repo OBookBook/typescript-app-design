@@ -37,7 +37,17 @@ async function showBoard() {
   });
 }
 
+async function registerGame() {
+  await fetch("api/games", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
+
 async function main() {
+  await registerGame();
   await showBoard();
 }
 
