@@ -28,4 +28,9 @@ chmod +x ./bin/connect_mysql.sh
 docker-compose down
 ```
 
-## bin
+# load ddl
+
+```shell
+chmod +x ./bin/load_ddl.sh
+./bin/load_ddl.sh
+```
