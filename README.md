@@ -33,4 +33,5 @@ docker-compose down
 ```shell
 chmod +x ./bin/load_ddl.sh
 ./bin/load_ddl.sh
+show tables;
 ```
