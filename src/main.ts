@@ -91,6 +91,50 @@ app.post("/api/games", async (req, res) => {
   res.status(201).end();
 });
 
+// http://localhost:3100/api/games/latest/turns/0
+app.get("/api/games/latest/turns/:turnCount", async (req, res) => {
+  const turnCount = parseInt(req.params.turnCount);
+  const connection = await connetMySQL();
+
+  try {
+    const gameSelectResult = await connection.execute<mysql.RowDataPacket[]>(
+      "select id, started_at from games order by id desc limit 1"
+    );
+
+    console.log(gameSelectResult);
+
+    const game = gameSelectResult[0][0];
+    const turnSelectResult = await connection.execute<mysql.RowDataPacket[]>(
+      "select id, game_id, turn_count, next_disc, end_at from turns where game_id = ? and turn_count = ?",
+      [game["id"], turnCount]
+    );
+
+    const turn = turnSelectResult[0][0];
+    const squareSelectResult = await connection.execute<mysql.RowDataPacket[]>(
+      "select id, turn_id, x, y, disc from squares where turn_id = ?",
+      [turn["id"]]
+    );
+
+    const squares = squareSelectResult[0];
+    const board = Array.from(Array(8)).map(() => Array.from(Array(8)));
+    squares.forEach((s) => {
+      board[s.y][s.x] = s.disc;
+    });
+
+    const responseBody = {
+      turnCount,
+      board,
+      nextDisc: turn["next_disc"],
+      // @TODO
+      winnerDisc: null,
+    };
+
+    res.json(responseBody);
+  } finally {
+    await connection.end();
+  }
+});
+
 app.use(errorHandler);
 
 // @comand: npx ts-node src/main.ts
